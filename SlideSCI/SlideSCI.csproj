@@ -253,6 +253,7 @@
     </Compile>
     <Compile Include="components\ScaleBarSettings.cs" />
     <Compile Include="components\ScaleBarService.cs" />
+    <Compile Include="components\InkscapePdfExporter.cs" />
     <Compile Include="components\ScaleBarLayout.cs" />
     <Compile Include="components\ScaleBarPreview.cs">
       <SubType>Component</SubType>
@@ -261,6 +262,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ribbon.ScaleBars.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ribbon.HighQualityPdf.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="components\MediaFilePasteRibbon.cs" />

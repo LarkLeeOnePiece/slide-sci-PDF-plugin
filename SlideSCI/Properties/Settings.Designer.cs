@@ -422,5 +422,13 @@ namespace SlideSCI.Properties {
             get { return ((string)(this["ScaleBarOptions"])); }
             set { this["ScaleBarOptions"] = value; }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InkscapePath {
+            get { return ((string)(this["InkscapePath"])); }
+            set { this["InkscapePath"] = value; }
+        }
     }
 }

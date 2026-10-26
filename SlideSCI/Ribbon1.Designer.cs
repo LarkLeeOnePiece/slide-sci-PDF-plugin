@@ -155,6 +155,7 @@ namespace SlideSCI
             this.setSpacingButton = this.Factory.CreateRibbonButton();
             this.exportImageButton = this.Factory.CreateRibbonButton();
             this.导出原图 = this.Factory.CreateRibbonButton();
+            this.highQualityPdfButton = this.Factory.CreateRibbonButton();
             this.复制大图 = this.Factory.CreateRibbonButton();
             this.btnAISidebar = this.Factory.CreateRibbonButton();
             this.btnShapeLibrary = this.Factory.CreateRibbonButton();
@@ -523,6 +524,7 @@ namespace SlideSCI
             // 
             this.exportGroup.Items.Add(this.exportImageButton);
             this.exportGroup.Items.Add(this.导出原图);
+            this.exportGroup.Items.Add(this.highQualityPdfButton);
             this.exportGroup.Items.Add(this.复制大图);
             this.exportGroup.Label = "导出";
             this.exportGroup.Name = "exportGroup";
@@ -870,6 +872,14 @@ namespace SlideSCI
             this.导出原图.Label = "导出原图";
             this.导出原图.Name = "导出原图";
             this.导出原图.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ExportOriginalImage_Click);
+            // 
+            // highQualityPdfButton
+            // 
+            this.highQualityPdfButton.Label = "高清PDF";
+            this.highQualityPdfButton.Name = "highQualityPdfButton";
+            this.highQualityPdfButton.ScreenTip = "用 Inkscape 将选中对象导出为高清 PDF";
+            this.highQualityPdfButton.SuperTip = "将选中的图片或形状导出为 SVG，图片换回文稿中的原始分辨率数据，再用 Inkscape 转为 PDF。文字和形状保持矢量。需要安装 Inkscape 1.0 或更高版本。";
+            this.highQualityPdfButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.HighQualityPdf_Click);
             // 
             // 复制大图
             // 
@@ -1577,6 +1587,7 @@ namespace SlideSCI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton 复制大图;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton createZoomImageButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton 导出原图;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton highQualityPdfButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton 图片上标题;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton updateLabelsButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button8;
