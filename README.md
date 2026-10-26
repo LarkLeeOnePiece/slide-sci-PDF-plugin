@@ -10,6 +10,8 @@
 
 SlideSCI 高清PDF版是一个面向科研绘图与组会汇报的 PowerPoint 插件，基于 [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4 修改。在保留原插件全部功能的基础上，新增 **「高清PDF」导出**。
 
+⭐ 如果这个插件对你有帮助，欢迎给项目点个 [Star](https://github.com/LarkLeeOnePiece/slide-sci-PDF-plugin)，这是对我最大的鼓励！
+
 > **修改声明：** 2026 年 10 月由 LarkLeeOnePiece 修改，新增「高清PDF」导出功能和安装程序。原作者的功能介绍与教程见附件：[原 README（中文）](docs/upstream/README.md) · [Original README (English)](docs/upstream/README.en.md)
 
 ### 三步得到高清 PDF

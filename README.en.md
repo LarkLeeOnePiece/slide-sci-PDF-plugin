@@ -10,6 +10,8 @@
 
 SlideSCI HD PDF Edition is a PowerPoint add-in for scientific figures and research presentations, modified from [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4. It keeps every feature of the original add-in and adds **HD PDF export**. (The labels in the figure above are in Chinese.)
 
+⭐ If you find this add-in useful, please give the project a [Star](https://github.com/LarkLeeOnePiece/slide-sci-PDF-plugin). It means a lot!
+
 > **Modification notice:** Modified by LarkLeeOnePiece in October 2026 to add the HD PDF export and an installer. For the original author's feature overview and tutorials, see the archived copies: [Original README (Chinese)](docs/upstream/README.md) · [Original README (English)](docs/upstream/README.en.md)
 
 The add-in's buttons, dialogs and installer are in Chinese. This README gives the Chinese labels together with their English meaning so you can find them in the interface.
