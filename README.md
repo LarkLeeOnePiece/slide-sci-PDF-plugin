@@ -2,19 +2,32 @@
 
 # SlideSCI 高清PDF版
 
-一个面向科研绘图与组会汇报的 PowerPoint 插件，基于 [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4 修改。在保留原插件全部功能的基础上，新增 **「高清PDF」导出**：把选中的图片和形状导出为图片保持原始分辨率、文字和形状保持矢量的 PDF。
+**一键把 PowerPoint 里的学术插图导出为高清 PDF，完整保留图像细节。**
+
+<p align="center">
+  <img src="teaser.png" alt="SlideSCI 高清PDF：在 PowerPoint 中制作幻灯片，点击 SlideSCI 一键导出，得到图像和文字细节完整保留的高清 PDF" width="100%">
+</p>
+
+SlideSCI 高清PDF版是一个面向科研绘图与组会汇报的 PowerPoint 插件，基于 [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4 修改。在保留原插件全部功能的基础上，新增 **「高清PDF」导出**。
 
 > **修改声明：** 2026 年 10 月由 LarkLeeOnePiece 修改，新增「高清PDF」导出功能和安装程序。原作者的功能介绍与教程见附件：[原 README（中文）](docs/upstream/README.md) · [Original README (English)](docs/upstream/README.en.md)
 
-## 为什么需要高清PDF
+### 三步得到高清 PDF
 
-PowerPoint 自带的「导出为 PDF」会把图片压缩成 JPEG 并降低分辨率（2000 px 的图片导出后只剩约 200 ppi）。手动「另存为图片 → SVG → Inkscape 转 PDF」能保住矢量文字，但 SVG 里的图片同样已被 PowerPoint 压缩。
+1. **在 PowerPoint 中制作幻灯片**，选中要导出的图片、图表或整组插图；
+2. **点击 SlideSCI → 导出 → 高清PDF**；
+3. **获得高清 PDF**：图像保持原始分辨率，文字、公式和排版保持矢量。
 
-「高清PDF」一键完成整个流程，并修复其中的画质损失：
+### 为什么不用 PowerPoint 自带的导出
 
-- 普通图片换回文稿中保存的**原始图片**，无损嵌入；
-- 带三维旋转、亮度调整等效果的图片按 **4 倍分辨率（约 384 dpi）** 重新渲染；
-- 文字可搜索、字体嵌入，形状、线条保持矢量，透明度和裁剪效果不变。
+PowerPoint 的「导出为 PDF」会把图片压缩成 JPEG 并降低到约 200 dpi，放大后细节模糊、出现像素块。手动「另存为图片 → SVG → Inkscape 转 PDF」能保住矢量文字，但 SVG 里的图片同样已被压缩。
+
+| | PowerPoint 普通导出 | SlideSCI 高清PDF |
+|---|---|---|
+| 普通图片 | JPEG，约 200 dpi | 换回文稿中的**原始图片**，无损嵌入 |
+| 带三维旋转等效果的图片 | 约 200 dpi | 按 **4 倍分辨率（约 384 dpi）** 重新渲染 |
+| 文字与公式 | 矢量 | 矢量，可搜索，字体嵌入 |
+| 形状、线条与透明度 | 矢量 | 矢量，颜色、透明度、裁剪和排版保持不变 |
 
 ## 安装
 

@@ -2,21 +2,34 @@
 
 # SlideSCI HD PDF Edition
 
-A PowerPoint add-in for scientific figures and research presentations, modified from [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4. It keeps every feature of the original add-in and adds **HD PDF export**: selected pictures and shapes are exported to a PDF in which pictures keep their original resolution while text and shapes stay vector.
+**Export scientific figures from PowerPoint to high-resolution PDF in one click, with every image detail preserved.**
+
+<p align="center">
+  <img src="teaser.png" alt="SlideSCI HD PDF: build the slide in PowerPoint, click SlideSCI to export, and get a PDF that keeps image and text detail (figure labels in Chinese)" width="100%">
+</p>
+
+SlideSCI HD PDF Edition is a PowerPoint add-in for scientific figures and research presentations, modified from [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4. It keeps every feature of the original add-in and adds **HD PDF export**. (The labels in the figure above are in Chinese.)
 
 > **Modification notice:** Modified by LarkLeeOnePiece in October 2026 to add the HD PDF export and an installer. For the original author's feature overview and tutorials, see the archived copies: [Original README (Chinese)](docs/upstream/README.md) · [Original README (English)](docs/upstream/README.en.md)
 
 The add-in's buttons, dialogs and installer are in Chinese. This README gives the Chinese labels together with their English meaning so you can find them in the interface.
 
-## Why HD PDF
+### HD PDF in three steps
 
-PowerPoint's built-in "Export to PDF" recompresses pictures as JPEG at a lower resolution (a 2000 px picture ends up at about 200 ppi). Exporting manually via "Save as Picture → SVG → Inkscape → PDF" keeps text as vectors, but the pictures inside the SVG have already been compressed by PowerPoint.
+1. **Build your slide in PowerPoint** and select the pictures, charts or whole figure group to export.
+2. **Click SlideSCI → 导出 (Export) → 高清PDF (HD PDF).**
+3. **Get a high-resolution PDF**: pictures keep their original resolution; text, equations and layout stay vector.
 
-HD PDF runs the whole pipeline in one click and repairs the quality loss along the way:
+### Why not PowerPoint's built-in export
 
-- Plain pictures are swapped back to the **original images** stored in the presentation and embedded losslessly.
-- Pictures with PowerPoint effects (3D rotation, brightness, …) are re-rendered at **4× resolution (about 384 dpi)**.
-- Text is searchable with embedded fonts, shapes and lines stay vector, and transparency and cropping are preserved.
+PowerPoint's "Export to PDF" recompresses pictures as JPEG at about 200 dpi, so details blur and turn blocky when zoomed in. Exporting manually via "Save as Picture → SVG → Inkscape → PDF" keeps text as vectors, but the pictures inside the SVG have already been compressed.
+
+| | PowerPoint export | SlideSCI HD PDF |
+|---|---|---|
+| Plain pictures | JPEG, about 200 dpi | Swapped back to the **original images** in the deck, embedded losslessly |
+| Pictures with effects such as 3D rotation | About 200 dpi | Re-rendered at **4× resolution (about 384 dpi)** |
+| Text and equations | Vector | Vector, searchable, fonts embedded |
+| Shapes, lines and transparency | Vector | Vector, with colors, transparency, cropping and layout unchanged |
 
 ## Installation
 
