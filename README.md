@@ -1,278 +1,158 @@
-<div align="center">
+# SlideSCI（高清 PDF 导出版）
 
-[English](README.en.md) | 简体中文
+本项目基于 [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) v2.2.4 修改，是一个面向科研绘图与组会汇报的 PowerPoint 插件（VSTO，C#）。在保留原插件全部功能的基础上，新增了**「高清PDF」导出**：把选中的图片和形状借助 [Inkscape](https://inkscape.org/) 导出为保留原始图片分辨率的矢量 PDF。
 
-<a href="https://hellogithub.com/repository/Achuan-2/SlideSCI" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=54e09132ba0a40cf9ff6594320e6c6ba&claim_uid=k20NpB9znZ3v6h8" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a> <a href="https://atomgit.com/Achuan-2/SlideSCI"><img alt="AtomGit G-Star" src="https://atomgit.com/Achuan-2/SlideSCI/star/new_badge.svg"></a>
+> 原作者的功能介绍、使用教程和视频请见附件：[原 README（中文）](docs/upstream/README.md) · [Original README (English)](docs/upstream/README.en.md)
 
+## 与原版的区别：高清PDF
 
+PowerPoint 自带的「导出为 PDF」会把图片降采样并转为 JPEG（例如 2000 px 的 PNG 会变成约 200 ppi 的 JPEG）。手动「另存为图片 → SVG → Inkscape 转 PDF」能保住矢量和文字，但 SVG 中的图片同样被 PowerPoint 压缩过。
 
-</div>
+「高清PDF」按钮自动完成整个流程，并在中间修复图片质量：
 
+1. 用 PowerPoint 把选中对象导出为 SVG，版式、旋转、裁剪、透明度和文字都保持矢量。
+2. 把 SVG 中被压缩的图片换回文稿里保存的**原始图片**（按内容比对，只替换确实是同一张图的位置）。
+3. 带三维旋转、亮度调整等 PowerPoint 效果的图片无法使用原图，改为对该形状单独做 **4 倍分辨率（约 384 dpi）重新渲染**，再按原位置精确贴回。
+4. 调用 Inkscape 输出 PDF：文字可搜索、字体嵌入，形状保持矢量。
 
-<img width="2406" height="753" alt="image" src="https://fastly.jsdelivr.net/gh/Achuan-2/PicBed@pic/assets/17664118034781766411794674.png" />
+导出的 PDF 页面就是所选对象在幻灯片上的真实尺寸。PowerPoint 界面里「另存为图片」得到的 SVG 会按屏幕缩放倍率放大，所以手动流程得到的 PDF 页面会大好几倍；两者内容比例相同，只是整体缩放不同。
 
-<a href="https://www.star-history.com/?repos=Achuan-2%2FSlideSCI&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Achuan-2/SlideSCI&type=date&theme=dark&legend=top-left&sealed_token=6sD4feBP6uwpoEYUsdr18okyIWG2PCJ_Bm0GpR80ZE4A0_CIw0lzx01H3owSDoqs5ncA3CBWxaO2T63_eJVf2p8Z8oWaOvFdaFC0u2mtJvcipaWiozHU9KmoM3yfgLuVengmvc7RYOI3xUsllMjMyUHWzVhGKJEcKoMoKRatArOY_yOfHceyo7L_aGPY" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Achuan-2/SlideSCI&type=date&legend=top-left&sealed_token=6sD4feBP6uwpoEYUsdr18okyIWG2PCJ_Bm0GpR80ZE4A0_CIw0lzx01H3owSDoqs5ncA3CBWxaO2T63_eJVf2p8Z8oWaOvFdaFC0u2mtJvcipaWiozHU9KmoM3yfgLuVengmvc7RYOI3xUsllMjMyUHWzVhGKJEcKoMoKRatArOY_yOfHceyo7L_aGPY" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Achuan-2/SlideSCI&type=date&legend=top-left&sealed_token=6sD4feBP6uwpoEYUsdr18okyIWG2PCJ_Bm0GpR80ZE4A0_CIw0lzx01H3owSDoqs5ncA3CBWxaO2T63_eJVf2p8Z8oWaOvFdaFC0u2mtJvcipaWiozHU9KmoM3yfgLuVengmvc7RYOI3xUsllMjMyUHWzVhGKJEcKoMoKRatArOY_yOfHceyo7L_aGPY" />
- </picture>
-</a>
+## 环境要求
 
-插件功能预览
+| 项目 | 要求 |
+|---|---|
+| 系统 | Windows 10 / 11（插件不支持 Mac） |
+| PowerPoint | Microsoft 365 / PowerPoint 2016 及以上 |
+| 运行库 | .NET Framework 4.7.2、[Visual Studio 2010 Tools for Office Runtime](https://www.microsoft.com/zh-cn/download/details.aspx?id=105522) |
+| 高清PDF | [Inkscape](https://inkscape.org/release/) 1.0 或更高版本（已在 1.4.2 上测试） |
+| 编译 | Visual Studio 2019 或 2022，安装 **Office/SharePoint 开发** 工作负载 |
 
-<img alt="PixPin_2025-08-29_15-10-51" src="https://s2.loli.net/2025/08/29/lRWKUwJCTjrk9ec.png" />
+## 安装（从源码编译）
 
-<img alt="PixPin_2025-08-29_15-11-12" src="https://s2.loli.net/2025/08/29/3dsS9UFtWL1niZx.png" />
+本版本没有安装包，需要在本机编译。编译成功后，Visual Studio 会自动把插件注册到当前用户的 PowerPoint，之后每次启动 PowerPoint 都会加载。
 
+### 1. 卸载或移除原版 SlideSCI（重要）
 
-## 🙏 赞助商
+如果装过原作者发布的 SlideSCI，请先在「设置 → 应用」中卸载它。原版在注册表中的条目 `HKCU\Software\Microsoft\Office\PowerPoint\Addins\Achuan-2.SlideSCI` 即使处于禁用状态，也会导致本版本的选项卡**不显示且没有任何提示**。卸载后如果条目还在，可以手动删除：
 
-| 赞助商 | 说明 |
-| --- | --- |
-| ![17873186772188803ff9ca56b8aefe5fa96dcb51eb47d-20260821211408-jzsp68c.jpg](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed@pic/assets/17873186772188803ff9ca56b8aefe5fa96dcb51eb47d-20260821211408-jzsp68c.jpg) | 感谢 APIMart 赞助了本项目！APIMart 是专注 AI 图片/视频生成的低价 API 平台，GPT-Image-2 低至 $0.006/张，1 美元可出图 160+ 张。图片、视频一套异步 API 通吃，提交任务拿 ID、回调取结果，跑批万张不超时、换模型不改代码。按量付费、无月费，通过此[注册链接](https://go.apimart.ai/gh-slidesci)注册即可开用。 |
+```powershell
+Remove-Item 'HKCU:\Software\Microsoft\Office\PowerPoint\Addins\Achuan-2.SlideSCI'
+```
 
+### 2. 获取代码并还原 NuGet 包
 
-## ❤️ 友情推荐
+```powershell
+git clone https://github.com/LarkLeeOnePiece/slide-sci-PDF-plugin.git
+cd slide-sci-PDF-plugin
+nuget restore SlideSCI.sln
+```
 
-我的Adobe illustrator插件：[https://github.com/Achuan-2/illustrator_sci_plugin](https://github.com/Achuan-2/illustrator_sci_plugin)，专为科研组图设计，支持复制粘贴相对位置、形状尺寸批量设置、图片一键自动排列，一键添加子图label等功能
+没有 `nuget.exe` 时，用 Visual Studio 打开解决方案，右键解决方案 →「还原 NuGet 包」。
 
-<img width="354" height="496" alt="PixPin_2026-10-04_10-42-50-20261004104256-b8zpcz3" src="https://github.com/user-attachments/assets/2788da81-99c3-42b8-aae6-ea9c1c28f1ab" />
+### 3. 准备签名证书
 
+项目默认使用原作者的清单签名证书，本机没有对应私钥，需要换成自己的证书。生成一个本机自用的测试证书：
 
-## 📝 开发背景
+```powershell
+$cert = New-SelfSignedCertificate -Subject 'CN=SlideSCI Local Dev' -Type CodeSigningCert `
+    -CertStoreLocation Cert:\CurrentUser\My -NotAfter (Get-Date).AddYears(10)
+$cert.Thumbprint   # 记下这个指纹，编译时要用
+```
 
-不知道有没有人和我一样，对PPT积怨已久😡：
+程序集强名称使用仓库中的 `SlideSCI/SlideSCI_TemporaryKey.pfx`（无密码）。
 
-💔​**不能添加图片标题**：图片没法像word一样直接添加图片标题，只能手动插入文本框，对齐半天还歪七扭八！
+### 4. 编译
 
-💔​**不能复制元素的位置粘贴给另一个元素**：不同页PPT的类似元素要保持同一个位置，只能复制粘贴再修改，无法直接复制粘贴位置
+**方式 A：Visual Studio 界面**
 
-💔**不能图片自动排列整齐：**  插入多张图片后，想要多行多列整齐排列？要么一张一张手动拖动，对齐到天荒地老！要么先一列列水平对齐再垂直对齐
+1. 打开 `SlideSCI.sln`，右键 SlideSCI 项目 →「属性」→「签名」→ 勾选「为 ClickOnce 清单签名」→「从存储区选择」，选择 `SlideSCI Local Dev`。
+2. 首次编译时如果弹出导入 `SlideSCI_TemporaryKey.pfx` 的密码框，密码留空确认即可。
+3. 按 F5 编译并启动 PowerPoint。
 
-💔**不能插入代码块：**  只能从外部编辑器（如VSCode）或专门网站复制粘贴，或者截图、生成图片粘贴代码块，有点麻烦
+这会修改 `SlideSCI.csproj` 中的 `ManifestCertificateThumbprint`，提交代码时不要提交这一行。
 
-💔**不能插入latex数学公式：**  现在我基本上靠ai来识别和生成数学公式，公式都是latex数学公式格式，不方便直接粘贴到PPT里
+**方式 B：命令行（不修改项目文件）**
 
-……
+```powershell
+& 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe' `
+    SlideSCI.sln /p:Configuration=Debug /p:ManifestCertificateThumbprint=<上一步的指纹>
+```
 
-市面上的ppt插件花里胡哨的功能一大堆，没几个能用得上。对我而言，每周要做研究生科研进展工作汇报，要的就是快速插入内容、做出内容清晰的PPT，不追求太美观。
+VS 2022 的 MSBuild 路径为 `C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe`。
 
-在AI的帮助下，很快就把这些痛点功能都开发出来了 ！真的成就感满满！（这个插件99%的代码都是ai生成的，感谢AI老师！）
+命令行编译若报错 `MSB3325: Cannot import the following key file: SlideSCI_TemporaryKey.pfx`，需要把强名称密钥导入错误信息里给出的密钥容器（名称形如 `VS_KEY_XXXXXXXXXXXXXXXX`，每台电脑不同）：
 
-本着开源的精神，这个插件也在Github上开源了，欢迎大家给我点小星星！
+```powershell
+$container = 'VS_KEY_XXXXXXXXXXXXXXXX'   # 替换为错误信息中的名称
+$pfx = New-Object Security.Cryptography.X509Certificates.X509Certificate2(
+    (Resolve-Path 'SlideSCI\SlideSCI_TemporaryKey.pfx').Path, '',
+    [Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
+$csp = New-Object Security.Cryptography.CspParameters(1)
+$csp.KeyContainerName = $container
+$csp.KeyNumber = 2
+$csp.Flags = [Security.Cryptography.CspProviderFlags]::UseMachineKeyStore
+$rsa = New-Object Security.Cryptography.RSACryptoServiceProvider($csp)
+$rsa.PersistKeyInCsp = $true
+$rsa.ImportParameters($pfx.PrivateKey.ExportParameters($true))
+```
 
-Github地址：[https://github.com/Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI)
+然后重新运行编译命令。
 
-## ✨ 主要功能
+### 5. 启动 PowerPoint
 
+编译成功后启动 PowerPoint，功能区会出现 **SlideSCI** 和 **SlideSCI(2)** 两个选项卡。首次加载时如果弹出「无法验证发布者」，点「安装」即可（测试证书是自签名的，只会询问一次）。
 
+以后修改代码重新编译前，需要先关闭 PowerPoint，否则插件 DLL 被占用会导致编译失败。
 
-- **素材库功能**
-  - 支持把PPT里的形状保存为素材，后续可以方便插入到当前PPT页面​
-  - 支持创建文件夹​
-  - 支持搜索​
-  - 支持导入和导出，可以互相分享素材​
-  ![](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed/assets/PixPin_2026-06-11_19-39-47-2026-06-11.png)
-- **AI助手**
-  - 设置API地址、API key后，即可使用AI对当前PPT内容进行编辑，也可以根据需要修改系统提示词
-  <img alt="PixPin_2026-06-05_19-48-55" src="https://assets.b3logfile.com/siyuan/1610205759005/assets/PixPin_2026-06-05_19-48-55-20260605194857-k3xeayj.png" />
+## 使用高清PDF
 
-  <img alt="PixPin_2026-06-05_19-41-17" src="https://assets.b3logfile.com/siyuan/1610205759005/assets/PixPin_2026-06-05_19-41-17-20260605194434-g59zugv.png" />
-- **记录上传的图片和视频来源**：PPT默认插入图片/图片是不记录文件名和路径的，默认只给文件添加编号。插件的插入图片功能，支持一次选择多张图片并在图片替换文本记录文件路径，同时在「选择窗格」能正常显示图片文件名；还支持在资源管理器中复制一个或多个图片文件，在 PPT 普通视图的幻灯片中粘贴时自动插入并记录来源。
-- **支持导入 16 位 TIFF**：通过 `SlideSCI → 图片来源 → 插入图片`、从资源管理器复制文件后普通粘贴，或拖入幻灯片，自动将 16 位灰度 TIFF 和每通道 16 位的 RGB/RGBA TIFF 转为 8 位 PNG 嵌入，并自动调节对比度。
-- **伪彩与合并通道**：入口为 `SlideSCI → 图片处理 → 伪彩 / 合并通道`。选中一张或多张图片后点击「伪彩」，可预览并逐张设置常用的红、绿、蓝、灰、青、品红、黄，也可选择自定义颜色或将当前颜色应用到全部图片。并支持合并通道。
-- **FOV 与比例尺（scale bar）**：入口为 `SlideSCI → 图片处理 → 比例尺`，点击「比例尺」即可在同一窗口查看和编辑 FOV 信息及比例尺参数，右侧显示图片实时预览。时会重新计算比例尺。比例尺或文字放不进图片时，提示减小长度、厚度或字号。
-- **导出页面为图片和PDF**：可以快速导出PPT页面为高DPI图片或pdf
-  ![](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed/assets/Achuan的PPT插件_页面10-2026-06-11.png)
-- **批量添加图片标题**：支持批量选中图片后，批量在图片下方添加居中图题，支持设置图片和图题是否自动编组  
-  ​<img alt="" src="https://s2.loli.net/2025/08/29/OoXlgpGdrtx2bEP.png" />
-- **批量添加图片标签**：用于科研绘图，可选择添加的标签模板（`A`、`a`、`A)`、`a)`、`1`、`1)`），默认添加的标签字体为`Arial`<img alt="" src="assets/network-asset-68747470733a2f2f666173746c792e6a7364656c6976722e6e65742f67682f41636875616e2d322f5069634265642f6173736574732f50697850696e5f323032352d30312d32345f31382d33342d31312d323032352d30312d32342e706e6-20250417103743-vry4kvj.png" />
+1. 在幻灯片上选中要导出的图片或形状，可以多选，也可以选中组合。
+2. 点击 **SlideSCI 选项卡 → 导出 → 高清PDF**。
+3. 首次使用会自动查找 Inkscape（依次检查已保存的路径、注册表、PATH 和常见安装目录）；找不到时会让你手动选择 `inkscape.exe`，之后会记住。
+4. 选择保存位置。导出期间 PowerPoint 会短暂无响应，转换通常需要几秒。
+5. 完成后会提示各类图片的处理情况，例如：
 
-- **制作放大图**：快速展示图片的局部细节，支持为同一张原图制作多个放大图，并继续编辑已有区域。入口：`SlideSCI → 其他 → 制作放大图`。
+   > 共 11 张图片：5 张使用原始图片，6 张带三维旋转等效果的图片按 4 倍分辨率重新渲染。
 
-  ![制作放大图：多个区域、独立设置、自动布局和辅助线联动](assets/zoom-image-feature.png)
+多选时导出为一个 PDF，对象之间的相对位置保持不变。
 
-  - **创建放大区域**：选中一张图片，点击「制作放大图」，在窗口中用左键框选区域，点击「确定」生成放大图，并在原图上添加对应的无填充矩形。也可以选中图片和手动添加的普通矩形后打开窗口，不用考虑选择顺序；窗口默认继承手动矩形的描边样式，确认后将其设为无填充。生成时复制原图进行局部取图，保留原图。
-  - **多个区域与再次编辑**：点击「添加新放大图」可继续框选，新区域继承当前选中区域的样式。点击不同矩形或通过「当前放大图」下拉框切换，各区域的矩形、放大图和辅助线设置会分别加载。选中原图再次打开窗口，会自动加载已有放大区域；各区域的设置随演示文稿保存，重新打开后仍可编辑。窗口中的修改点击「确定」后统一应用。
-  - **矩形与画面操作**：拖动矩形可调整位置，拖动边角可调整大小，按 `Delete` 删除当前区域。滚轮缩放图片，点击「适应窗口」恢复视图；开启其右侧的「抓手」按钮后，可用左键拖动画面，也支持中键或按住空格加左键拖动。
-  - **描边设置**：可设置矩形的线宽、描边颜色和线型，初始默认为红色虚线、1.5 pt。放大图默认勾选「使用矩形描边颜色」，可为每个区域单独设置。窗口会记住上次使用的设置。
-  - **放置位置**：支持右侧、左侧、上侧和下侧，默认放在右侧。新增放大图放在左右侧时与原图等高，放在上下侧时与原图等宽；多个放大图沿所选方向向外排列。编辑已有放大图时，保留手动调整过的位置和大小；修改区域宽高比时会相应调整放大图尺寸，切换放置方向则重新排布。
-  - **辅助线与联动**：可选择添加辅助线，颜色、线宽和线型与放大矩形一致，支持「仅在原图内」和「可超出图片」两种绘制范围。单独移动、缩放或旋转放大矩形后，松开鼠标会自动重新取图，保留放大图的位置、旋转角度、描边和层级，并按新区域的宽高比调整尺寸；即使未添加辅助线也会更新。矩形完全移出原图时保留上次的放大图，移回重叠区域后继续更新。放大图移动或缩放后，松开鼠标会自动更新辅助线；原图移动、缩放或旋转时，对应矩形会跟随调整。删除放大图后，会自动删除对应矩形和辅助线；如果矩形仍被其他放大图共用，则继续保留。
+**关于文件大小：** 原始图片按无损方式嵌入。如果文稿里有远超显示尺寸的大图（例如 3840 px 的图只占 6 cm 宽），PDF 会明显比手动流程大，这部分细节在正常查看和打印时看不出来。
 
-- **图片自动排列**：可以自动排列多张图片，支持设置排序方式、排列方式、每列多少张图片、列间距多少、行间距多少（默认为空，为列间距大小）、图片宽高
+原插件的其他功能（图片标题、子图标签、排列、复制粘贴位置、代码块、LaTeX/Markdown、放大图、比例尺、伪彩、素材库、AI 助手等）用法不变，请参考[原 README](docs/upstream/README.md)。
 
-  - **排序方式**：
+## 常见问题
 
-    - 根据位置排序：可以根据用户手动粗排的图片位置，来自动判断图片的排列顺序。
-    - 根据多选顺序：根据用户的多选选择顺序来排列
-  - **排列方式**：
+**选项卡没有出现，也没有任何提示**
+几乎都是因为注册表里还留着原版的 `Achuan-2.SlideSCI` 条目，按[安装第 1 步](#1-卸载或移除原版-slidesci重要)删除后重启 PowerPoint。也可以在「文件 → 选项 → 加载项」确认 SlideSCI 是否在「活动的应用程序加载项」中。
 
-    - **列最大宽度占位排列**：按每列的最大宽度来占位排列，以保持表格布局，适用于科研绘图的图片排版
-    - **统一高度排列**：默认统一图片的高度进行排列，如果不设置图片高度，则使用第一张图片的高度来统一图片高度
-    - **统一宽度瀑布流**：默认统一图片的宽度进行排列，如果不设置图片宽度，则使用第一张图片的宽度来统一图片宽度  
-      ​<img alt="" src="https://s2.loli.net/2025/08/29/RmxjZpTzGDL8evP.png" />
-- **复制粘贴格式功能**  
-  ​<img alt="" src="https://s2.loli.net/2025/08/29/3fjcw5KWbsLJkAo.png" />
+**弹出 `Custom UI Runtime Error in SlideSCI: Unknown Office control ID: ShapeFillColor`**
+只有勾选了「文件 → 选项 → 高级 → 常规 → 显示加载项用户界面错误」才会看到。原因是「复制/粘贴形状样式」按钮使用的内置图标在新版 Office 中已不存在，只影响这两个按钮的图标，功能正常。点「OK」或取消勾选上述选项即可。
 
-  - **复制粘贴文字和形状格式**：可以复制形状、文字的格式，粘贴给其他元素。
-    ![](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed/assets/Achuan的PPT插件_页面6-2026-06-11.png)
-  - **复制粘贴组格式**：快速把排版好的组合样式加给现有文本框
-    ![](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed/assets/Achuan的PPT插件_页面7-2026-06-11.png)
-  - **复制位置和粘贴元素位置**：可以复制多个元素的位置，粘贴给其他元素（可以多选复制和粘贴！），可以用来让不同页的PPT的多个元素位置一致，或者让同一页的不同元素都是一个位置（可以先排好一组元素，用这个功能让另一组元素自动排好，再调整位置）。  
-  - **复制相对位置和粘贴相对位置**：选择参考图和标注后，可记录标注相对于图片的位置。“顺序”默认按全部选中形状的水平位置从左到右排列，最左边的形状作为参考图；也可选垂直位置从上到下（最上边作为参考图），或按选中顺序（第一个选中的形状作为参考图）。粘贴时使用复制时的顺序确定目标图和已有标注；如果只选目标图，插件会自动复制原标注并放到对应位置。复制时支持左上、上居中、右上、左居中、中心、右居中、左下、下居中、右下九种基准点。
-    ​<img alt="" src="https://s2.loli.net/2025/08/29/q5vblI3nrDhewJ6.gif" />  
-      
-    ​<img alt="" src="https://s2.loli.net/2025/08/29/u19w8IMkOYjE3rz.gif" />
-  - **复制和粘贴元素宽高**：支持多选同时粘贴宽高，快速统一图片宽高
-- **图文同缩**：可以对文字与形状同时进行缩放
-  ![](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed/assets/Achuan的PPT插件_页面9-2026-06-11.png)
-- **支持插入latex数学公式**  
-  ​「插入Markdown」可以快速插入文字与数学混排
-  <img  alt="image" src="https://github.com/user-attachments/assets/8d345baf-41af-473d-a182-3c7d2864c155" />
+**提示未找到 Inkscape**
+确认已安装 Inkscape 1.0 以上版本，并在弹出的对话框里选择安装目录 `bin` 下的 `inkscape.exe`。
 
-  「插入LaTeX文字」单独插入可编辑的数学公式
+**编译时提示文件被占用**
+PowerPoint 正在加载插件 DLL，关闭所有 PowerPoint 窗口后再编译。
 
-  <img  alt="image" src="https://github.com/user-attachments/assets/d33eba81-4241-4ec6-bc73-057087be8a5e" />
+## 卸载
 
-  如果数学公式比较复杂，PPT原生不支持，可以选择「插入LaTeX svg」，使用内置 MathJax 支持更多公式样式，无需安装 Node.js 或 LaTeX 环境。
-  <img  alt="PixPin_2025-09-30_10-21-00" src="https://github.com/user-attachments/assets/4d7732b2-47da-41e1-bb22-ddfceab4604b" />
-  插入的svg的图片提示文字会保留原始LaTeX代码，方便修改后再插入
-  <img  alt="PixPin_2025-09-30_10-25-48" src="https://github.com/user-attachments/assets/b5bbeaf1-8b12-44b1-9664-4591741e83ea" />
+在 Visual Studio 中点击「生成 → 清理解决方案」即可取消注册；或直接删除注册表条目：
 
+```powershell
+Remove-Item 'HKCU:\Software\Microsoft\Office\PowerPoint\Addins\SlideSCI'
+```
 
+## 开发与测试
 
-  > 「插入LaTeX svg」所需资源随插件内置，安装后可直接使用。首次使用需要初始化转换引擎，后续插入会复用引擎。
+- 高清PDF 的核心逻辑在 `SlideSCI/components/InkscapePdfExporter.cs`，按钮处理在 `SlideSCI/Ribbon.HighQualityPdf.cs`。
+- 测试脚本位于 `tests/`。高清PDF 的端到端测试需要 PowerPoint 和 Inkscape：
 
+  ```powershell
+  powershell -STA -File tests\InkscapePdf.PowerPoint.Tests.ps1
+  ```
 
-- **支持插入Markdown文本**：可以直接把markdown整篇笔记一口气全部粘贴到PPT里！并按原文顺序排列！  
-  ​<img alt="" src="https://s2.loli.net/2025/08/29/MPKOgWonijCsl4D.png" />
+## 致谢与许可
 
-  - 支持行内格式：加粗、下划线、上标、下标、斜体、链接、行级代码、行级数学公式
-  - 支持块级格式：标题、列表、代码块、表格、数学公式、引述块
-
-    - 列表特别处理：
-
-      - 保留列表悬挂缩进：常规粘贴html中的列表到PPT里会丢失悬挂缩进，本插件粘贴列表可以保留悬挂缩进
-      - 支持任务列表粘贴，列表项符号会转化为☑和☐，代表完成和未完成
-    - 代码块特别处理：
-
-      ​<img alt="" src="https://s2.loli.net/2025/08/29/jbSgDfnP69eZopV.png" />
-
-      - **支持代码语言高亮列表**：matlab、python、r、js、html、css、csharp、Fortran
-      - **支持切换黑白背景色**：默认是黑色背景色，切换为背景色，只需要点击「代码黑色背景色」按钮取消激活状态即可
-    - 表格特别处理：
-
-      - 默认限制500px宽度，添加1pt黑色边框
-    - 数学公式特别处理：
-
-      - 行内公式与正文一起保留，块级公式独立文本框，支持PPT直接再编辑
-      - Markdown 公式内置 KaTeX 转换，无需安装 Node.js 或 pnpm
-      - 支持范围以 KaTeX 为准，不支持的公式会保留源码并提示
-    - 引述块特别处理：
-
-      - 独立文本框，添加黑色边框
-  - 支持插入SVG代码来插入SVG图片
-- 排列增强
-  - **形状对齐**：支持左对齐、水平居中、右对齐、顶端对齐、垂直居中、底端对齐。只选一个形状时对齐到幻灯片边缘或中心；多选时以第一个选中的形状为基准，保持它的位置不变。
-  <img alt="image" src="https://github.com/user-attachments/assets/41edddf8-d363-43f9-ae79-63ef1961a7db" />
-- **支持设置间距**：可以统一设置各个形状之间的水平和垂直间距
-  ![](https://fastly.jsdelivr.net/gh/Achuan-2/PicBed/assets/Achuan的PPT插件_页面12-2026-06-11.png)
-
-
-
-## 🪟 支持环境
-
-插件在Windows11 使用[Visual Studio Tools For Office](https://www.visualstudio.com/de/vs/office-tools/) 和C#语言开发，专为Microsoft Powerpoint设计，兼容安装到WPS（注：WPS版本不支持插入latex数学公式、插入markdown笔记，强行使用会造成卡死）
-
-> 插件只支持Windows端，不支持Mac端（因为Windows端的PPT插件和Mac端插件开发架构不一样，市面上很多的PPT插件，Windows端和Mac端都是独立开发的界面）
-
-## 🖥️ 安装方法
-
-下载本插件Github页面[Release](https://github.com/Achuan-2/my_ppt_plugin/releases)中的exe文件，双击安装即可
-
-注意：安装时需要先退出PPT，否则PPT不会即时加载该插件
-
-需要的安装环境（一般插件安装时会自动提示安装）
-
-- 运行环境1：[Microsoft .Net Framework 4.0或更高](https://www.microsoft.com/zh-cn/download/details.aspx?id=17718)
-- 运行环境2：[Microsoft Visual Studio 2010 Tools for Office Runtime](https://www.microsoft.com/zh-cn/download/details.aspx?id=105522)
-
-如果插件安装后无法正常运行、没有在PPT中显示，或者在开发工具→COM加载项里勾选插件，提示“未加载。加载COM加载项时出现运行错误”，请尝试安装上面的环境依赖。
-
-## 📝 使用介绍
-
-博客
-- [我开发了一个PPT插件！支持批量添加图片标题，复制粘贴位置、批量图片对齐！](https://www.zhihu.com/question/377291781/answer/75728785092)
-- [为了方便每周组会汇报，我写了一个ppt插件（SlideSCI），GitHub Star数破500](https://zhuanlan.zhihu.com/p/1949229789304067434)
-- [我的PPT插件800 star啦，新增标签更新功能](https://zhuanlan.zhihu.com/p/1954149983461827580)
-- [Github 800+ stars的开源PPT插件更新：插入LaTeX数学公式功能大升级，高效输入各种数学公式](https://www.zhihu.com/question/48751192/answer/1956080929509446635)
-- [我写了一个给研究生用的开源PPT插件，Github获得1k stars啦！](https://www.zhihu.com/question/432909311/answer/1961532582823985595)
-- [GitHub 2k stars的PPT开源插件大更新啦！](https://zhuanlan.zhihu.com/p/2045949794397562333)
-- [GitHub 2k stars的PPT插件更新：新增素材库功能和AI编辑PPT功能](https://zhuanlan.zhihu.com/p/2046319007821834133)
-- [为了在PPT上制作放大图，我开发了一个插件！](https://zhuanlan.zhihu.com/p/2089071868494070180?share_code=1gkp00IbBnySq&utm_psn=2089169922819733434)
-- [终于让PPT能保留上传图片的文件名了！](https://zhuanlan.zhihu.com/p/2089363380301837259)
-
-视频
-- [让AI帮我我开发了一个PPT插件！支持一键添加图片标题，复制粘贴位置、一键图片对齐、一键插入代码块、一键插入latex公式！_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV15YcmeSEbq/?spm_id_from=0.0.homepage.video_card.click&vd_source=b4a1fcb6dce305e26d8d16d9cbb71304)
-- [可能是全网第一个支持插入Markdown到PPT的PPT插件_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1VXcZe2EyK/?spm_id_from=0.0.homepage.video_card.click)
-
-## 🤝 参与开发
-
-我是如何开发PPT插件的分享：[如何开发一个PPT插件：使用VSTO开发](https://mp.weixin.qq.com/s/LpOw5tdbHTbC1FsG4seEOw)
-
-## ❓ 常见问题
-
-- **如何把插件的功能添加到PPT的快捷工具栏？**   
-  按钮右击，添加到「快速访问工具栏」即可  
-  ​<img alt="" src="https://s2.loli.net/2025/08/29/RdxoUpzIcZMTv6u.png" />  
-  可以把「快速访问工具栏」放在下方，更方便使用
-
-- **插入latex公式，显示不正常？**
-
-  - 「插入latex文字」按钮由于调用的是PPT自带的功能，比较适合插入简单的数学公式，插入复杂的latex请使用「插入latex svg」
-  - PPT特殊latex语法举例见：[#7](https://github.com/Achuan-2/SlideSCI/issues/7)
-- **如何及时获取插件版本更新**
-
-  Github有关注功能，关注本项目的repo的release动态，当新版本发布后，Github就会自动发邮件通知
-  <img alt="PixPin_2025-10-14_20-54-44" src="https://github.com/user-attachments/assets/646144ed-8ed1-47d5-afb3-889dd0c2bfdf" />
-
-  <img alt="PixPin_2025-10-14_20-55-32" src="https://github.com/user-attachments/assets/9eefb02d-e57f-4193-a331-18ca696745e9" />
-
-
-
-## ❤️ 用爱发电
-
-开源与创作不易，如果喜欢我的作品，欢迎给我赞赏，这会激励我继续维护项目和持续创作新项目。
-
-
-<img alt="" src="https://s2.loli.net/2025/08/29/tI4HCGzql17nr2D.png" />
-
-## 👨‍💻 问题反馈
-
-如果使用过程中遇到问题，可以通过以下方式反馈:
-
-1. 在 GitHub 上提 [Issue](https://github.com/Achuan-2/SlideSCI/issues)
-2. 发送邮件到: [achuan-2@outlook.com](mailto:achuan-2@outlook.com)
-
-## 🔍 参考项目与致谢
-
-- [jph00/latex-ppt](https://github.com/jph00/latex-ppt): LaTeX in PowerPoint 支持
-- [Markdig](https://github.com/xoofx/markdig): Markdown 解析支持
-- [MathJax](https://github.com/mathjax/MathJax): 数学公式转SVG支持
-- [KaTeX](https://github.com/KaTeX/KaTeX) 与 [Jint](https://github.com/sebastienros/jint): 无需 Node.js 的 Markdown 公式转 MathML 支持
-- 感谢 Visual Studio Tools For Office 提供的开发支持
-- 感谢所有提供建议反馈以及捐赠赞赏的用户
-
-## 📄 特别说明
-
-- 本仓库发布的`SlideSCI`项目中涉及的任何脚本，仅用于测试和学习研究，禁止用于商业用途，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断。
-- ​`本人` 对任何脚本问题概不负责，包括但不限于由任何脚本错误导致的任何损失或损害.
-- 未经授权，请勿将`SlideSCI`项目的任何内容用于商业或非法目的，否则后果自负。
-- 以任何方式查看此项目的人或直接或间接使用`SlideSCI`项目的任何脚本的使用者都应仔细阅读此声明。`本人` 保留随时更改或补充此免责声明的权利。一旦使用并复制了任何相关脚本或`SlideSCI`项目，则视为您已接受此免责声明。
-- 本项目遵循`AGPL-3.0 License`协议，如果本特别声明与`AGPL-3.0 License`协议有冲突之处，以本特别声明为准。
-
-
-
-> 您使用或者复制了本仓库且本人制作的任何代码或项目，则视为`已接受`此声明，请仔细阅读  
-> 您在本声明未发出之时点使用或者复制了本仓库且本人制作的任何代码或项目且此时还在使用，则视为`已接受`此声明，请仔细阅读
+- 原项目：[Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI)，作者 Achuan-2。原 README（含功能介绍、教程、致谢与免责声明）存档于 [docs/upstream/README.md](docs/upstream/README.md)。
+- 高清PDF 依赖 [Inkscape](https://inkscape.org/) 完成 SVG 到 PDF 的转换。
+- 本项目沿用原项目的 [AGPL-3.0](LICENSE) 许可证，原项目的[特别说明](docs/upstream/README.md#-特别说明)同样适用。

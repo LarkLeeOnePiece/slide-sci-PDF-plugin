@@ -1,3 +1,5 @@
+> 📎 Archived copy of the original README from [Achuan-2/SlideSCI](https://github.com/Achuan-2/SlideSCI) (v2.2.4, commit `8d8209a`); only relative image paths were adjusted. See the [project README](../../README.md) for this version.
+
 <div align="center">
 
 English | [简体中文](README.md)
